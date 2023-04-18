@@ -14,7 +14,7 @@ if rP == 't':
     Vw = float(input('Podaj predkość statku: '))
     Vw /= 2
 else:
-    Vw = float(input('Podaj predkość statku: '))
+    Vw = float(input('Podaj predkość statku w m/s: '))
 
 tmp = input('Jeżeli znane jest zasolenie wpisz "t" ')
 if tmp == 't':
