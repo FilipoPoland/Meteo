@@ -17,8 +17,12 @@ def draughts(densty_list, zanurzenie0):
     return draughts_list
 
 
+def pol_usr(get_input):
+    fr_cptr = get_input.replace(',', '.')
+    fr_cptr = fr_cptr.replace(' ', '')
+    return fr_cptr
+
+
 root = tkinter.Tk()
-
-
 
 root.mainloop()
