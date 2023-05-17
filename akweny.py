@@ -1,3 +1,5 @@
+import tkinter as tk
+
 # pytanie o ilosc koniecnych podejsc
 akwen = input('Ile jest akwenów?')
 akwen = akwen.replace(' ', '')
