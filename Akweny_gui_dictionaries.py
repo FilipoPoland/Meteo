@@ -17,10 +17,10 @@ import tkinter
 #     return draughts_list
 
 
-# def pol_usr(get_input):
-#     fr_cptr = get_input.replace(',', '.')
-#     fr_cptr = fr_cptr.replace(' ', '')
-#     return fr_cptr
+def pol_usr(get_input):
+    fr_cptr = get_input.replace(',', '.')
+    fr_cptr = fr_cptr.replace(' ', '')
+    return fr_cptr
 
 def btnpress():
     global pola_tw
@@ -47,9 +47,9 @@ def btnpress():
     # zasolenie
     # zsl_input.grid(column=3, row=count)
     pola_zsl[key].grid(column=3, row=count)
-    print(pola_tw)  # sprawdzenie, czy słownik zapisuje się poprawnie
-    print(pola_zsl) # to samo
-
+    # sprawdzenie w konsoli czy slownik zapisuje sie poprawnie
+    print(pola_tw)
+    print(pola_zsl)
 
 
 def counting():
@@ -59,31 +59,50 @@ def counting():
 
 
 def btncalc():
+    global tw_1Input
+    global zsl_1input
     global pola_tw
     global pola_zsl
     global l_tw   
     global l_zsl
     print(count)
-    # Fajnie do tych co ustawiam w głownym kodzie mogę się dostać
-    tw1 = float(tw_1Input.get())
-    zsl1 = float(zsl_1input.get())
-    print(tw1, zsl1)
+
+    try:
+        # dodanie do listy pierwszego wiersza pól
+        l_tw.append(float(pol_usr(tw_1Input.get())))
+    except:
+        print('Incorrect temp input')
+
+    try:
+        l_zsl.append(float(zsl_1input.get()))
+    except:
+        print('Incorrect salinity input')
+
+    # dodanie do listy pol uzytkownika
     for i in pola_tw.values():
-        l_tw.append(float(i.get()))
+        try:
+            l_tw.append(float(pol_usr(i.get())))
+        except:
+            print('Incorrect temp input')
     for i in pola_zsl.values():
-        l_zsl.append(float(i.get()))
+        try:
+            l_zsl.append(float(pol_usr(i.get())))
+        except:
+            print('Incorrect salinity input')
     print(l_tw)
     print(l_zsl)
+
 
 
 # wazne stale
 count = 2
 
-# listy fajnie by bylo jakby mozna bylo kolejne pola do wpisu wrzucac tutaj
+# listy
 l_tw = []
 l_zsl = []
-pola_tw = {}        # słownik na pola temperatury
-pola_zsl = {}       # słownik na pola zasolenia
+#slowniki
+pola_tw = {}
+pola_zsl = {}
 
 # program
 root = tkinter.Tk()

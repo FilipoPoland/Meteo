@@ -51,7 +51,6 @@ def counting():
 def btncalc():
     print(count)
 
-    # Fajnie do tych co ustawiam w głownym kodzie mogę się dostać
     tw1 = float(tw_1Input.get())
     zsl1 = float(zsl_1input.get())
     print(tw1, zsl1)
@@ -60,9 +59,9 @@ def btncalc():
 # wazne stale
 count = 2
 
-# listy fajnie by bylo jakby mozna bylo kolejne pola do wpisu wrzucac tutaj
-l_tw = []
-l_zsl = []
+# slowniki
+d_tw = {}        # słownik na pola temperatury
+d_zsl = {}       # słownik na pola zasolenia
 
 # program
 root = tkinter.Tk()
