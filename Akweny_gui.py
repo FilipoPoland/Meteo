@@ -1,26 +1,27 @@
 import tkinter
 
 
-# def density(water_temp, salinity):
-#     pu = (28.1522 - (0.0735 * float(water_temp)) - (0.00469 * (float(water_temp) ** 2)) +
-#           (0.802 - (0.002 * float(water_temp))) * (float(salinity) - 35.0))
-#     g = float(pu) / 1000 + 1
-#     return g
+def density(water_temp, salinity):
+    pu = (28.1522 - (0.0735 * float(water_temp)) - (0.00469 * (float(water_temp) ** 2)) +
+          (0.802 - (0.002 * float(water_temp))) * (float(salinity) - 35.0))
+    g = float(pu) / 1000 + 1
+    return g
 
 
-# def draughts(densty_list, zanurzenie0):
-#     draughts_list = []
-#     for i in densty_list:
-#         zanurzenie = ((float(densty_list[i])) / float(densty_list[i+1])) * float(zanurzenie0)
-#         draughts_list.append(zanurzenie)
-#         zanurzenie0 = zanurzenie
-#     return draughts_list
+def draughts(densty_list, zanurzenie0):
+    global l_znrz
+    l_znrz = []
+    for i in densty_list:
+        zanurzenie = ((float(densty_list[i])) / float(densty_list[i+1])) * float(zanurzenie0)
+        l_znrz.append(zanurzenie)
+        zanurzenie0 = zanurzenie
+    return l_znrz
 
 
-# def pol_usr(get_input):
-#     fr_cptr = get_input.replace(',', '.')
-#     fr_cptr = fr_cptr.replace(' ', '')
-#     return fr_cptr
+def pol_usr(get_input):
+    fr_cptr = get_input.replace(',', '.')
+    fr_cptr = fr_cptr.replace(' ', '')
+    return fr_cptr
 
 def btnpress():
     counting()
@@ -28,18 +29,18 @@ def btnpress():
     # to mimo dodawania pól nie robi dla mnie nic przydatnego bo nie wiem jak odwołać się do tych pół
     # akwen nazwa
     lbl = tkinter.Label(text=f'Akwen {count-1}')
-    # temperatura wody pole do danych
-    tw_input = tkinter.Entry(root, validate='key')
-    # zasolenie pole danych
-    zsl_input = tkinter.Entry(root, )
+
+    # pola
+    key = f'num{count - 1}'
+    d_tw[key] = tkinter.Entry(root, validate='key')
+    d_zsl[key] = tkinter.Entry(root, )
 
     # akwen nazwa
     lbl.grid(column=1, row=count)
     # temperatura wody
-    tw_input.grid(column=2, row=count)
-
+    d_tw[key].grid(column=2, row=count)
     # zasolenie
-    zsl_input.grid(column=3, row=count)
+    d_zsl[key].grid(column=3, row=count)
 
 
 def counting():
@@ -49,15 +50,59 @@ def counting():
 
 
 def btncalc():
+    global tw_1Input
+    global zsl_1input
+    global d_tw
+    global d_zsl
+    global l_tw
+    global l_zsl
+    global l_dns
+    global l_znrz
     print(count)
 
-    tw1 = float(tw_1Input.get())
-    zsl1 = float(zsl_1input.get())
-    print(tw1, zsl1)
+    # dodanie do listy pierwszego wiersza pól
+    try:
+        l_tw.append(float(pol_usr(tw_1Input.get())))
+    except:
+        print('Incorrect temp input')
+
+    try:
+        l_zsl.append(float(zsl_1input.get()))
+    except:
+        print('Incorrect salinity input')
+
+    # dodanie do listy pól użytkownika
+    for i in d_tw.values():
+        try:
+            l_tw.append(float(pol_usr(i.get())))
+        except:
+            print('Incorrect temp input')
+    for i in d_zsl.values():
+        try:
+            l_zsl.append(float(pol_usr(i.get())))
+        except:
+            print('Incorrect salinity input')
+    # wyświetlenie list
+    print(f'Lista temperatur: {l_tw}')
+    print(f'Lista zasolenia: {l_zsl}')
+
+    # obliczenia dla wartości w liście gęstosci
+    for i in l_tw:
+        l_dns.append(density(i, l_zsl[i]))
+
+    # obliczenia dla wartości w liście zanurzeń
+    l_znrz = draughts(l_dns, znrz0)
 
 
 # wazne stale
 count = 2
+znrz0 = 0
+
+# listy
+l_tw = []       # temperatura wody
+l_zsl = []      # zasolenie
+l_dns = []      # density
+l_znrz = []     # zanurzenie
 
 # slowniki
 d_tw = {}        # słownik na pola temperatury
@@ -79,6 +124,7 @@ akwnLable = tkinter.Label(root, text='Akwen 1')
 # pola dane 1
 tw_1Input = tkinter.Entry(root, )
 zsl_1input = tkinter.Entry(root, )
+znrz0_1input = tkinter.Entry(root, )
 
 # guzik dodania więcej akwenów
 btn_add = tkinter.Button(root, text='Dodaj akwen.', padx=20, command=btnpress)

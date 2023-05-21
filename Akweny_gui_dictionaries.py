@@ -89,8 +89,8 @@ def btncalc():
             l_zsl.append(float(pol_usr(i.get())))
         except:
             print('Incorrect salinity input')
-    print(l_tw)
-    print(l_zsl)
+    print(f'Lista temperatur: {l_tw}')
+    print(f'Lista zasolenia: {l_zsl}')
 
 
 
