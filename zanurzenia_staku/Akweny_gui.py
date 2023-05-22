@@ -1,5 +1,6 @@
 import tkinter
-import time
+import datetime
+from tkinter import messagebox
 
 
 def density(water_temp, salinity):
@@ -12,9 +13,12 @@ def density(water_temp, salinity):
 def draughts(densty_list, zanurzenie0):
     global l_znrz
     try:
-        l_znrz.append(float(pol_usr(zanurzenie0)))
+        znrz = float(pol_usr(zanurzenie0))
+        l_znrz.append(znrz)
     except:
         print('Podano złą wartość zanurzenia początkowego.')
+        messagebox.showerror(message='Niepoprawne zanurzenie', title='Błąd')
+
     print(f'Count: {count}')
     for i in range(count - 2):
         zanurzenie = ((float(densty_list[i])) / float(densty_list[(i + 1)])) * float(zanurzenie0)
@@ -56,50 +60,45 @@ def counting():
 
 
 def btncalc():
-    global tw_1Input
-    global zsl_1input
-    global d_tw
-    global d_zsl
-    global l_tw
-    global l_zsl
-    global l_dns
-    global l_znrz
+    global tw_1Input, zsl_1input, znrz0
+    global d_tw, d_zsl
+    global l_tw, l_zsl, l_dns, l_znrz
+
     # reset list
     l_tw = []
     l_zsl = []
     l_dns = []
 
-    print(count)
-
     # dodanie do listy pierwszego wiersza pól
+    # dodanie temperatury 1 do listy
     try:
         l_tw.append(float(pol_usr(tw_1Input.get())))
     except:
         print('Incorrect temp input')
-
+        messagebox.showerror(message='Niepoprawna temperatura', title='Błąd')
+    # dodanie zasolenia 1 do listy
     try:
         l_zsl.append(float(zsl_1input.get()))
     except:
         print('Incorrect salinity input')
+        messagebox.showerror(message='Niepoprawne zasolenie', title='Błąd')
 
     # dodanie do listy pól użytkownika
+    # dodanie do listy temperatur
     for i in d_tw.values():
-        print(f'Pociągnięta wartość:{i}')
         try:
-            if i.get() is None:
-                l_tw.append(0)
-            else:
-                l_tw.append(float(pol_usr(i.get())))
+            l_tw.append(float(pol_usr(i.get())))
         except:
-            print('Incorrect temp input')
+            print(f'Niepoprawne zasolenie {i}')
+            messagebox.showerror(message=f'Niepoprawna temperatura', title='Błąd')
+    # dodanie do listy zasolenia
     for i in d_zsl.values():
         try:
-            if i.get() is None:
-                l_zsl.append(0)
-            else:
-                l_zsl.append(float(pol_usr(i.get())))
+            l_zsl.append(float(pol_usr(i.get())))
         except:
-            print('Incorrect salinity input')
+            print(f'Niepoprawne zasolenie - wiersz {i}')
+            messagebox.showerror(message=f'Niepoprawne zasolenie', title='Błąd')
+
     # wyświetlenie list
     print(f'Lista temperatur: {l_tw}')
     print(f'Lista zasolenia: {l_zsl}')
@@ -109,27 +108,30 @@ def btncalc():
         l_dns.append(density(l_tw[i], l_zsl[i]))
     print(f'Lista gęstości: {l_dns}')
 
+    # wyswietlenie gestosci
     for i in range(count - 1):
         dns = tkinter.Label(root, text=round(l_dns[i], 3))
         dns.grid(column=4, row=i + 2)
 
-    # obliczenia dla wartości w liście zanurzeń
+    # lista zanurzenia
     l_znrz = draughts(l_dns, znrz0_input.get())
     print(f'Lista zanurzeń: {l_znrz}')
 
-    for i in range(count - 1):
-        znrz = tkinter.Label(root, text=round(l_znrz[i], 3))
-        znrz.grid(column=5, row=i + 2)
+    # wyswietlenie zanurzen
+    for i in range(count - 2):
+        znrz = tkinter.Label(root, text=round(l_znrz[i + 1], 3))
+        znrz.grid(column=5, row=i + 3)
 
 
 def save():
+    time_stmp = str(datetime.datetime.now())
+    print(time_stmp)
     with open('saved_session.txt', 'a') as file:
-        file.write(f'\n'
-                   f'{time.asctime()}'
-                   f'Lista temperatur wody: {l_tw}'
-                   f'Lista zasoleń wody: {l_zsl}'
-                   f'Lista gęstości wody: {l_dns}'
-                   f'Lista zanurzeń statku: {l_znrz}')
+        file.write(str(time_stmp) + '\n'
+                   + 'Lista temperatur wody:\n' + str(l_tw) + '\n'
+                   + 'Lista zasolen wody: \n' + str(l_zsl) + '\n'
+                   + 'Lista gestosci wody: \n' + str(l_dns) + '\n'
+                   + 'Lista zanurzen statku:\n' + str(l_znrz) + '\n')
 
 
 # wazne stale
