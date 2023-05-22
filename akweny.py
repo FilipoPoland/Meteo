@@ -49,8 +49,6 @@ zanurzenie = 0
 listz = list()
 
 for h in range(Leftakweny):
-
-
     # obliczenie zanurzenia
     zanurzenie = ((float(listg[h]))/float(listg[h+1])) * float(zanurzenie0)
 
