@@ -1,4 +1,5 @@
 import tkinter
+from tkinter import Label
 
 
 def density(water_temp, salinity):
@@ -10,9 +11,10 @@ def density(water_temp, salinity):
 
 def draughts(densty_list, zanurzenie0):
     global l_znrz
+    print(f'Count: {count}')
     l_znrz = []
-    for i in densty_list:
-        zanurzenie = ((float(densty_list[i])) / float(densty_list[i+1])) * float(zanurzenie0)
+    for i in range(count-1):
+        zanurzenie = ((float(densty_list[i-1])) / float(densty_list[i])) * float(zanurzenie0)
         l_znrz.append(zanurzenie)
         zanurzenie0 = zanurzenie
     return l_znrz
@@ -87,12 +89,21 @@ def btncalc():
     print(f'Lista zasolenia: {l_zsl}')
 
     # obliczenia dla wartości w liście gęstosci
-    for i in l_tw:
-        l_dns.append(density(i, l_zsl[i]))
+    for i in range(count-1):
+        l_dns.append(density(l_tw[i], l_zsl[i]))
+    print(f'Lista gęstości: {l_dns}')
+
+    for i in range(count-1):
+        dns = tkinter.Label(root, text=l_dns[i])
+        dns.grid(column=4, row=i+2)
 
     # obliczenia dla wartości w liście zanurzeń
-    l_znrz = draughts(l_dns, znrz0)
+    l_znrz = draughts(l_dns, znrz0_input.get())
+    print(f'Lista zanurzeń: {l_znrz}')
 
+    for i in range(count-1):
+        znrz = tkinter.Label(root, text=l_znrz[i])
+        znrz.grid(column=5, row=i+2)
 
 # wazne stale
 count = 2
@@ -113,6 +124,7 @@ root = tkinter.Tk()
 root.title('Kalkulator zanurzeń')
 
 # top lable
+znrz0_lable = tkinter.Label(root, text='Zanurzenie początkowe')
 tw_1Label = tkinter.Label(root, text='Temperatura wody')
 zsl_1Lable = tkinter.Label(root, text='Zasolenie')
 g_wody1Lable = tkinter.Label(root, text='Gęstość wody')
@@ -122,9 +134,10 @@ z_statku1Lable = tkinter.Label(root, text='Zanurzenie statku')
 akwnLable = tkinter.Label(root, text='Akwen 1')
 
 # pola dane 1
-tw_1Input = tkinter.Entry(root, )
-zsl_1input = tkinter.Entry(root, )
-znrz0_1input = tkinter.Entry(root, )
+znrz0_input = tkinter.Entry(root)
+tw_1Input = tkinter.Entry(root)
+zsl_1input = tkinter.Entry(root)
+
 
 # guzik dodania więcej akwenów
 btn_add = tkinter.Button(root, text='Dodaj akwen.', padx=20, command=btnpress)
@@ -134,9 +147,11 @@ btncalculate = tkinter.Button(root, text='Oblicz', padx=20, command=btncalc)
 
 # packing
 # input fields
+znrz0_input.grid(column=2, row=0)
 tw_1Input.grid(column=2, row=2)
 zsl_1input.grid(column=3, row=2)
 # lable
+znrz0_lable.grid(column=1, row= 0)
 akwnLable.grid(column=1, row=2)
 tw_1Label.grid(column=2, row=1)
 zsl_1Lable.grid(column=3, row=1)

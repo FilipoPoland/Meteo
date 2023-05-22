@@ -37,7 +37,7 @@ for h in range(int(akweny)):
     print('Gęstość wody:', g)
 
 # check for the list
-print('Zasolenie:', listg)
+print('Gęstości:', listg)
 
 # wiadomosci wstepne
 zanurzenie0 = input('Jakie jest wyjściowe zanurzenie statku?')
@@ -50,12 +50,9 @@ listz = list()
 
 for h in range(Leftakweny):
 
-    # zdefiniowanie zasolen
-    gestosc1 = n
-    gestosc2 = 1 + n
 
     # obliczenie zanurzenia
-    zanurzenie = ((float(listg[int(gestosc1)]))/float(listg[int(gestosc2)])) * float(zanurzenie0)
+    zanurzenie = ((float(listg[h]))/float(listg[h+1])) * float(zanurzenie0)
 
     # dodanie do listy zanurzenia
     listz.append(zanurzenie)
@@ -63,8 +60,6 @@ for h in range(Leftakweny):
     # redefiniowanie zanurzenia0
     zanurzenie0 = zanurzenie
 
-    # redefiniowanie n
-    n = n + 1
 
 print('Zanurzenia:', listz)
 input('Naciśnij enter, aby zkończyć.')
