@@ -60,6 +60,12 @@ def btncalc():
     global l_zsl
     global l_dns
     global l_znrz
+    d_tw = {}
+    d_zsl = {}
+    l_tw = []
+    l_zsl = []
+    l_dns = []
+    l_znrz = []
     print(count)
 
     # dodanie do listy pierwszego wiersza pól
