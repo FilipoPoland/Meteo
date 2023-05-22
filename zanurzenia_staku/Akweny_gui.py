@@ -1,5 +1,5 @@
 import tkinter
-from tkinter import Label
+import time
 
 
 def density(water_temp, salinity):
@@ -38,8 +38,8 @@ def btnpress():
 
     # pola
     key = f'num{count - 1}'
-    d_tw[key] = tkinter.Entry(root, validate='key')
-    d_zsl[key] = tkinter.Entry(root, )
+    d_tw[key] = tkinter.Entry(root, validate='key', width=16)
+    d_zsl[key] = tkinter.Entry(root, width=16)
 
     # akwen nazwa
     lbl.grid(column=1, row=count)
@@ -64,10 +64,10 @@ def btncalc():
     global l_zsl
     global l_dns
     global l_znrz
+    # reset list
     l_tw = []
     l_zsl = []
     l_dns = []
-    l_znrz = []
 
     print(count)
 
@@ -84,13 +84,20 @@ def btncalc():
 
     # dodanie do listy pól użytkownika
     for i in d_tw.values():
+        print(f'Pociągnięta wartość:{i}')
         try:
-            l_tw.append(float(pol_usr(i.get())))
+            if i.get() is None:
+                l_tw.append(0)
+            else:
+                l_tw.append(float(pol_usr(i.get())))
         except:
             print('Incorrect temp input')
     for i in d_zsl.values():
         try:
-            l_zsl.append(float(pol_usr(i.get())))
+            if i.get() is None:
+                l_zsl.append(0)
+            else:
+                l_zsl.append(float(pol_usr(i.get())))
         except:
             print('Incorrect salinity input')
     # wyświetlenie list
@@ -115,6 +122,16 @@ def btncalc():
         znrz.grid(column=5, row=i + 2)
 
 
+def save():
+    with open('saved_session.txt', 'a') as file:
+        file.write(f'\n'
+                   f'{time.asctime()}'
+                   f'Lista temperatur wody: {l_tw}'
+                   f'Lista zasoleń wody: {l_zsl}'
+                   f'Lista gęstości wody: {l_dns}'
+                   f'Lista zanurzeń statku: {l_znrz}')
+
+
 # wazne stale
 count = 2
 znrz0 = 0
@@ -134,7 +151,7 @@ root = tkinter.Tk()
 root.title('Kalkulator zanurzeń')
 
 # top lable
-znrz0_lable = tkinter.Label(root, text='Zanurzenie początkowe')
+# znrz0_lable = tkinter.Label(root, text='Zanurzenie początkowe')
 tw_1Label = tkinter.Label(root, text='Temperatura wody')
 zsl_1Lable = tkinter.Label(root, text='Zasolenie')
 g_wody1Lable = tkinter.Label(root, text='Gęstość wody')
@@ -144,9 +161,9 @@ z_statku1Lable = tkinter.Label(root, text='Zanurzenie statku')
 akwnLable = tkinter.Label(root, text='Akwen 1')
 
 # pola dane 1
-znrz0_input = tkinter.Entry(root)
-tw_1Input = tkinter.Entry(root)
-zsl_1input = tkinter.Entry(root)
+znrz0_input = tkinter.Entry(root, width=16)
+tw_1Input = tkinter.Entry(root, width=16)
+zsl_1input = tkinter.Entry(root, width=16)
 
 # guzik dodania więcej akwenów
 btn_add = tkinter.Button(root, text='Dodaj akwen.', padx=20, command=btnpress)
@@ -154,13 +171,16 @@ btn_add = tkinter.Button(root, text='Dodaj akwen.', padx=20, command=btnpress)
 # guzik kalkuluj
 btncalculate = tkinter.Button(root, text='Oblicz', padx=20, command=btncalc)
 
+# guzik zappisz
+btn_save = tkinter.Button(root, text='Zapisz', padx=20, command=save)
+
 # packing
 # input fields
-znrz0_input.grid(column=2, row=0)
+znrz0_input.grid(column=5, row=2)
 tw_1Input.grid(column=2, row=2)
 zsl_1input.grid(column=3, row=2)
 # lable
-znrz0_lable.grid(column=1, row=0)
+# znrz0_lable.grid(column=1, row=0)
 akwnLable.grid(column=1, row=2)
 tw_1Label.grid(column=2, row=1)
 zsl_1Lable.grid(column=3, row=1)
@@ -170,6 +190,7 @@ z_statku1Lable.grid(column=5, row=1)
 # guziki
 btn_add.grid(column=1, row=1)
 btncalculate.grid(column=4, columnspan=2, ipadx=50, row=50)
+btn_save.grid(column=4, columnspan=2, ipadx=50, row=51)
 
 # petla
 root.mainloop()
