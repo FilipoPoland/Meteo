@@ -84,7 +84,7 @@ def btncalc():
         messagebox.showerror(message='Niepoprawna temperatura', title='Błąd')
     # dodanie zasolenia 1 do listy
     try:
-        l_zsl.append(float(zsl_1input.get()))
+        l_zsl.append(float(pol_usr(zsl_1input.get())))
     except:
         print('Incorrect salinity input')
         messagebox.showerror(message='Niepoprawne zasolenie', title='Błąd')
@@ -120,7 +120,8 @@ def btncalc():
         dns.grid(column=4, row=i + 2)
 
     # lista zanurzenia
-    l_znrz = draughts(l_dns, znrz0_input.get())
+    znrz = pol_usr(znrz0_input.get())
+    l_znrz = draughts(l_dns, znrz)
     print(f'Lista zanurzeń: {l_znrz}')
 
     # wyswietlenie zanurzen
@@ -331,10 +332,10 @@ root.title('Kalkulator zanurzeń')
 
 # top lable
 # znrz0_lable = tkinter.Label(root, text='Zanurzenie początkowe')
-tw_1Label = tkinter.Label(root, text='Temperatura wody')
-zsl_1Lable = tkinter.Label(root, text='Zasolenie')
+tw_1Label = tkinter.Label(root, text='Temperatura wody[C]')
+zsl_1Lable = tkinter.Label(root, text='Zasolenie[PSU]')
 g_wody1Lable = tkinter.Label(root, text='Gęstość wody')
-z_statku1Lable = tkinter.Label(root, text='Zanurzenie statku')
+z_statku1Lable = tkinter.Label(root, text='Zanurzenie statku[m]')
 
 # first side lable
 akwnLable = tkinter.Label(root, text='Akwen 1')
@@ -350,13 +351,13 @@ zsl_1input = tkinter.Entry(root, width=16, textvariable=var_zsl)
 
 #guziki
 # guzik dodania więcej akwenów
-btn_add = tkinter.Button(root, text='DODAJ AKWEN', padx=10, command=btnpress)
+btn_add = tkinter.Button(root, text='Dodaj akwen', padx=10, command=btnpress)
 # guzik kalkuluj
-btncalculate = tkinter.Button(root, text=' O B L I C Z  ', padx=15, command=btncalc)
+btncalculate = tkinter.Button(root, text=' O B L I C Z ', padx=15, command=btncalc)
 # guzik zapisz
-btn_save = tkinter.Button(root, text='ZAPISZ', padx=24, command=save)
+btn_save = tkinter.Button(root, text=' Z A P I S Z ', padx=15, command=save)
 # guzik otworz
-btn_open = tkinter.Button(root, text='OTWÓRZ', padx=25, command=open_log)
+btn_open = tkinter.Button(root, text='Otwórz', padx=28, command=open_log)
 # guzik converter
 btn_cnvrt = tkinter.Button(root, text='Konwerter', padx=20, command=converter_window)
 
@@ -374,10 +375,11 @@ g_wody1Lable.grid(column=4, row=1)
 z_statku1Lable.grid(column=5, row=1)
 # guziki
 btn_add.grid(column=1, row=1)
-btncalculate.grid(column=4, columnspan=2, ipadx=50, row=50)
-btn_save.grid(column=4, row=51)
-btn_open.grid(column=5, row=51)
-btn_cnvrt.grid(column=1, row=51)
+btncalculate.grid(column=4, columnspan=2, ipadx=51, row=50)
+btn_save.grid(column=4, columnspan=2, ipadx=52, row=51)
+
+btn_cnvrt.grid(column=1, row=50)
+btn_open.grid(column=1, row=51)
 
 # petla
 root.mainloop()
