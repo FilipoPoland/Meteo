@@ -36,6 +36,7 @@ def pol_usr(get_input):
 
 
 def btnpress():
+    global var
     counting()
 
     # to mimo dodawania pól nie robi dla mnie nic przydatnego bo nie wiem jak odwołać się do tych pół
@@ -43,9 +44,10 @@ def btnpress():
     lbl = tkinter.Label(text=f'Akwen {count - 1}')
 
     # pola
-    key = f'num{count - 1}'
-    d_tw[key] = tkinter.Entry(root, validate='key', width=16)
-    d_zsl[key] = tkinter.Entry(root, width=16)
+    key = f'num{count - 3}'
+
+    d_tw[key] = tkinter.Entry(root, validate='key', width=16, textvariable=var)
+    d_zsl[key] = tkinter.Entry(root, width=16, textvariable=var)
 
     # akwen nazwa
     lbl.grid(column=1, row=count)
@@ -92,14 +94,14 @@ def btncalc():
             l_tw.append(float(pol_usr(i.get())))
         except:
             print(f'Niepoprawne zasolenie {i}')
-            messagebox.showerror(message=f'Niepoprawna temperatura', title='Błąd')
+            messagebox.showerror(message='Niepoprawna temperatura', title='Błąd')
     # dodanie do listy zasolenia
     for i in d_zsl.values():
         try:
             l_zsl.append(float(pol_usr(i.get())))
         except:
             print(f'Niepoprawne zasolenie - wiersz {i}')
-            messagebox.showerror(message=f'Niepoprawne zasolenie', title='Błąd')
+            messagebox.showerror(message='Niepoprawne zasolenie', title='Błąd')
 
     # wyświetlenie list
     print(f'Lista temperatur: {l_tw}')
@@ -141,7 +143,7 @@ def open_log():
 
 
 def converter_window():
-
+    global tmp_in, dst_in, slc_dst_wnk, slc_dst, slc_tmp, slc_tmp_wnk, converter
     converter = tkinter.Toplevel()
     converter.title('Konverter')
 
@@ -163,20 +165,20 @@ def converter_window():
     # select
     # temperatura
     slc_tmp = tkinter.StringVar()
-    tmp_selected = ttk.Combobox(converter, width=10, textvariable=slc_tmp)
-    tmp_selected['values'] = ('Celsjusz', 'Farenheit')
+    tmp_selected = ttk.Combobox(converter, width=15, textvariable=slc_tmp)
+    tmp_selected['values'] = ('Celsjusz', 'Fahrenheit', 'Kelvin')
     # odleglosc
     slc_dst = tkinter.StringVar()
-    dst_selected = ttk.Combobox(converter, width=10, textvariable=slc_dst)
-    dst_selected['values'] = ('Metry', 'Stopy', 'Mile', 'Kilometry')
+    dst_selected = ttk.Combobox(converter, width=15, textvariable=slc_dst)
+    dst_selected['values'] = ('Metry', 'Stopy', 'Mile Morskie', 'Kilometry')
     # temperatura wynik
     slc_tmp_wnk = tkinter.StringVar()
-    tmp_selected_wnk = ttk.Combobox(converter, width=10, textvariable=slc_tmp_wnk)
-    tmp_selected['values'] = ('Celsjusz','Farenheit')
+    tmp_selected_wnk = ttk.Combobox(converter, width=15, textvariable=slc_tmp_wnk)
+    tmp_selected_wnk['values'] = ('Celsjusz', 'Fahrenheit', 'Kelvin')
     # odleglosc wynik
     slc_dst_wnk = tkinter.StringVar()
-    dst_selected_wnk = ttk.Combobox(converter, width=10, textvariable=slc_dst_wnk)
-    dst_selected['values'] = ('Metry', 'Stopy', 'Mile', 'Kilometry')
+    dst_selected_wnk = ttk.Combobox(converter, width=15, textvariable=slc_dst_wnk)
+    dst_selected_wnk['values'] = ('Metry', 'Stopy', 'Mile Morskie', 'Kilometry')
     # wyswietlenie select
     tmp_selected.grid(column=3, row=3)
     tmp_selected_wnk.grid(column=5, row=3)
@@ -196,48 +198,122 @@ def converter_window():
     # wyswietlenie buttons
     clc_tmp.grid(column=6, row=3)
     clc_dst.grid(column=6, row=4)
-    global tmp_in, dst_in, slc_dst_wnk, slc_dst, slc_tmp, slc_tmp_wnk, converter
+
+    # dodatatkowe
+    dst_lbl = tkinter.Label(converter, text='        ', width=20)
+    dst_lbl.grid(column=4, row=4)
+    tmp_lbl = tkinter.Label(converter, text='        ', width=20)
+    tmp_lbl.grid(column=4, row=5)
 
 
 def cnvrt_tmp_clc():
+    global tmp_in, dst_in, slc_dst_wnk, slc_dst, slc_tmp, slc_tmp_wnk, converter
     tmp = None
-    if slc_tmp is 'Celcjusz':
-        if slc_tmp_wnk is 'Celcjusz':
-            tmp = tmp_in.get()
+    try:
+        tmp_in = float(tmp_in.get())
+    except:
+        print('Błędna wartość temperatury.')
+        messagebox.showerror(message='Niepoprawna temperatura', title='Błąd')
+    print(slc_tmp.get())
+    print(slc_tmp_wnk.get())
 
+    if slc_tmp.get() == 'Celsjusz':
+        if slc_tmp_wnk.get() == 'Celsjusz':
+            tmp = tmp_in
+        elif slc_tmp_wnk.get() == 'Fahrenheit':
+            tmp = tmp_in * 9 / 5 + 32
+        elif slc_tmp_wnk.get() == 'Kelvin':
+            tmp = tmp_in + 273.15
+    elif slc_tmp.get() == 'Fahrenheit':
+        if slc_tmp_wnk.get() == 'Fahrenheit':
+            tmp = tmp_in
+        elif slc_tmp_wnk.get() == 'Celsjusz':
+            tmp = (tmp_in-32) * 5 / 9
+        elif slc_tmp_wnk.get() == 'Kelvin':
+            tmp = (tmp_in-32) * 5 / 9 + 273.15
+    elif slc_tmp.get() == 'Kelvin':
+        if slc_tmp_wnk.get() == 'Kelvin':
+            tmp = tmp_in
+        elif slc_tmp_wnk.get() == 'Celsjusz':
+            tmp = tmp_in - 273.15
+        elif slc_tmp_wnk.get() == 'Fahrenheit':
+            tmp = (tmp_in - 273.15) * 9 / 5 + 32
+    print(tmp)
     # wyswietlenie wyniku
-    tmp_lbl = tkinter.Label(converter, text=tmp)
-    tmp_lbl.grid(column=4, row=4)
+    tmp_lbl = tkinter.Label(converter, text=tmp, width=20)
+    tmp_lbl.grid(column=4, row=3)
 
 
 def cnvrt_dst_clc():
+    global tmp_in, dst_in, slc_dst_wnk, slc_dst, slc_tmp, slc_tmp_wnk, converter
     dst = None
-    if slc_dst is 'Metry':
-        if slc_dst_wnk is 'Metry':
+    dst_lbl = tkinter.Label(converter, text='        ', width=20)
+    dst_lbl.grid(column=4, row=4)
+    try:
+        float(dst_in.get())
+    except:
+        print('Błędna wartość odległości')
+        messagebox.showerror(message='Niepoprawna odległość', title='Błąd')
+    # z metrow na inne
+    if slc_dst.get() == 'Metry':
+        if slc_dst_wnk.get() == 'Metry':
+            dst = float(dst_in.get())
+        elif slc_dst_wnk.get() == 'Kilometry':
+            dst = float(dst_in.get()) / 1000
+        elif slc_dst_wnk.get() == 'Stopy':
+            dst = float(dst_in.get()) * 3.2808399
+        elif slc_dst_wnk.get() == 'Mile Morskie':
+            dst = float(dst_in.get()) * 0.00054
+    # ze stop na inne
+    elif slc_dst.get() == 'Stopy':
+        if slc_dst_wnk.get() == 'Stopy':
             dst = dst_in.get()
-    if slc_dst is 'Stopy':
-        if slc_dst_wnk is 'Stopy':
-            dst = dst_in.get()
-        if slc_dst_wnk is 'Metry':
-            try:
-                dst = float(dst_in.get()) * 0.3048
-            except:
-                print('Błędna wartość odległości')
-        elif slc_dst_wnk is 'Mile':
-            try:
-                dst = float(dst_in.get()) * 6076.12
-            except:
-                print('Błędna wartość odległości')
-        
+        elif slc_dst_wnk.get() == 'Metry':
+            dst = float(dst_in.get()) * 0.3048
+        elif slc_dst_wnk.get() == 'Mile Morskie':
+            dst = float(dst_in.get()) * 0.00016459199974982016
+        elif slc_dst_wnk.get() == 'Kilometry':
+            dst = float(dst_in.get()) * 0.000304799999536704
+    # z mil na inne
+    elif slc_dst.get() == 'Mile Morskie':
+        if slc_dst_wnk.get() == 'Mile Morskie':
+            dst = float(dst_in.get())
+        elif slc_dst_wnk.get == 'Kilometry':
+            dst = float(dst_in.get()) * 1.851851851851851852
+        elif slc_dst_wnk.get() == 'Metry':
+            dst = float(dst_in.get()) * 1851.851851851851852
+        elif slc_dst_wnk.get() == 'Stopy':
+            dst = float(dst_in.get()) * 6075.6294444444444449304948
+    # z kilemetrow na inne
+    elif slc_dst.get() == 'Kilometry':
+        if slc_dst_wnk.get() == 'Kilometry':
+            dst = float(dst_in.get())
+        elif slc_dst_wnk.get() == 'Mile Morskie':
+            dst = float(dst_in.get()) * 0.54
+        elif slc_dst_wnk.get() == 'Metry':
+            dst = float(dst_in.get()) * 1000
+        elif slc_dst_wnk.get() == 'Stopy':
+            dst = float(dst_in.get()) / 3280.8399
 
     # wyswietlenie wyniku
-    dst_lbl = tkinter.Label(converter, text=dst)
-    dst_lbl.grid(column=4, row=3)
+    dst = round(dst, 6)
+    dst_lbl = tkinter.Label(converter, text=dst, width=20)
+    dst_lbl.grid(column=4, row=4)
 
 
+# --- MAIN CODE ---
 # wazne stale
 count = 2
 znrz0 = 0
+
+# stale converter
+tmp_in = None
+dst_in = None
+slc_dst_wnk = None
+slc_dst = None
+slc_tmp = None
+slc_tmp_wnk = None
+converter = None
 
 # listy
 l_tw = []  # temperatura wody
@@ -263,10 +339,13 @@ z_statku1Lable = tkinter.Label(root, text='Zanurzenie statku')
 # first side lable
 akwnLable = tkinter.Label(root, text='Akwen 1')
 
+# str variable - podstawowa wartosc
+var = tkinter.StringVar(root, value='0')
 # pola dane 1
-znrz0_input = tkinter.Entry(root, width=16)
-tw_1Input = tkinter.Entry(root, width=16)
-zsl_1input = tkinter.Entry(root, width=16)
+znrz0_input = tkinter.Entry(root, width=16, textvariable=var)
+tw_1Input = tkinter.Entry(root, width=16, textvariable=var)
+zsl_1input = tkinter.Entry(root, width=16, textvariable=var)
+
 
 #guziki
 # guzik dodania więcej akwenów
