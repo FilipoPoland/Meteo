@@ -36,18 +36,20 @@ def pol_usr(get_input):
 
 
 def btnpress():
-    global var
     counting()
 
     # to mimo dodawania pól nie robi dla mnie nic przydatnego bo nie wiem jak odwołać się do tych pół
     # akwen nazwa
     lbl = tkinter.Label(text=f'Akwen {count - 1}')
 
-    # pola
+    # zmienna do słownika
     key = f'num{count - 3}'
-
-    d_tw[key] = tkinter.Entry(root, validate='key', width=16, textvariable=var)
-    d_zsl[key] = tkinter.Entry(root, width=16, textvariable=var)
+    # dopisanie do zmiennych 0
+    var_1 = tkinter.StringVar(root, value='0')
+    var_2 = tkinter.StringVar(root, value='0')
+    # pola tekstowe
+    d_tw[key] = tkinter.Entry(root, validate='key', width=16, textvariable=var_1)
+    d_zsl[key] = tkinter.Entry(root, width=16, textvariable=var_2)
 
     # akwen nazwa
     lbl.grid(column=1, row=count)
@@ -210,7 +212,7 @@ def cnvrt_tmp_clc():
     global tmp_in, dst_in, slc_dst_wnk, slc_dst, slc_tmp, slc_tmp_wnk, converter
     tmp = None
     try:
-        tmp_in = float(tmp_in.get())
+        tmp_u_in = float(tmp_in.get())
     except:
         print('Błędna wartość temperatury.')
         messagebox.showerror(message='Niepoprawna temperatura', title='Błąd')
@@ -219,25 +221,25 @@ def cnvrt_tmp_clc():
 
     if slc_tmp.get() == 'Celsjusz':
         if slc_tmp_wnk.get() == 'Celsjusz':
-            tmp = tmp_in
+            tmp = tmp_u_in
         elif slc_tmp_wnk.get() == 'Fahrenheit':
-            tmp = tmp_in * 9 / 5 + 32
+            tmp = tmp_u_in * 9 / 5 + 32
         elif slc_tmp_wnk.get() == 'Kelvin':
-            tmp = tmp_in + 273.15
+            tmp = tmp_u_in + 273.15
     elif slc_tmp.get() == 'Fahrenheit':
         if slc_tmp_wnk.get() == 'Fahrenheit':
-            tmp = tmp_in
+            tmp = tmp_u_in
         elif slc_tmp_wnk.get() == 'Celsjusz':
-            tmp = (tmp_in-32) * 5 / 9
+            tmp = (tmp_u_in-32) * 5 / 9
         elif slc_tmp_wnk.get() == 'Kelvin':
-            tmp = (tmp_in-32) * 5 / 9 + 273.15
+            tmp = (tmp_u_in-32) * 5 / 9 + 273.15
     elif slc_tmp.get() == 'Kelvin':
         if slc_tmp_wnk.get() == 'Kelvin':
-            tmp = tmp_in
+            tmp = tmp_u_in
         elif slc_tmp_wnk.get() == 'Celsjusz':
-            tmp = tmp_in - 273.15
+            tmp = tmp_u_in - 273.15
         elif slc_tmp_wnk.get() == 'Fahrenheit':
-            tmp = (tmp_in - 273.15) * 9 / 5 + 32
+            tmp = (tmp_u_in - 273.15) * 9 / 5 + 32
     print(tmp)
     # wyswietlenie wyniku
     tmp_lbl = tkinter.Label(converter, text=tmp, width=20)
@@ -247,53 +249,51 @@ def cnvrt_tmp_clc():
 def cnvrt_dst_clc():
     global tmp_in, dst_in, slc_dst_wnk, slc_dst, slc_tmp, slc_tmp_wnk, converter
     dst = None
-    dst_lbl = tkinter.Label(converter, text='        ', width=20)
-    dst_lbl.grid(column=4, row=4)
     try:
-        float(dst_in.get())
+        dst_u_in = float(dst_in.get())
     except:
         print('Błędna wartość odległości')
         messagebox.showerror(message='Niepoprawna odległość', title='Błąd')
     # z metrow na inne
     if slc_dst.get() == 'Metry':
         if slc_dst_wnk.get() == 'Metry':
-            dst = float(dst_in.get())
+            dst = dst_u_in
         elif slc_dst_wnk.get() == 'Kilometry':
-            dst = float(dst_in.get()) / 1000
+            dst = dst_u_in / 1000
         elif slc_dst_wnk.get() == 'Stopy':
-            dst = float(dst_in.get()) * 3.2808399
+            dst = dst_u_in * 3.2808399
         elif slc_dst_wnk.get() == 'Mile Morskie':
-            dst = float(dst_in.get()) * 0.00054
+            dst = dst_u_in * 0.00054
     # ze stop na inne
     elif slc_dst.get() == 'Stopy':
         if slc_dst_wnk.get() == 'Stopy':
-            dst = dst_in.get()
+            dst = dst_u_in
         elif slc_dst_wnk.get() == 'Metry':
-            dst = float(dst_in.get()) * 0.3048
+            dst = dst_u_in * 0.3048
         elif slc_dst_wnk.get() == 'Mile Morskie':
-            dst = float(dst_in.get()) * 0.00016459199974982016
+            dst = dst_u_in * 0.00016459199974982016
         elif slc_dst_wnk.get() == 'Kilometry':
-            dst = float(dst_in.get()) * 0.000304799999536704
+            dst = dst_u_in * 0.000304799999536704
     # z mil na inne
     elif slc_dst.get() == 'Mile Morskie':
         if slc_dst_wnk.get() == 'Mile Morskie':
-            dst = float(dst_in.get())
+            dst = dst_u_in
         elif slc_dst_wnk.get == 'Kilometry':
-            dst = float(dst_in.get()) * 1.851851851851851852
+            dst = dst_u_in * 1.851851851851851852
         elif slc_dst_wnk.get() == 'Metry':
-            dst = float(dst_in.get()) * 1851.851851851851852
+            dst = dst_u_in * 1851.851851851851852
         elif slc_dst_wnk.get() == 'Stopy':
-            dst = float(dst_in.get()) * 6075.6294444444444449304948
+            dst = dst_u_in * 6075.6294444444444449304948
     # z kilemetrow na inne
     elif slc_dst.get() == 'Kilometry':
         if slc_dst_wnk.get() == 'Kilometry':
-            dst = float(dst_in.get())
+            dst = dst_u_in
         elif slc_dst_wnk.get() == 'Mile Morskie':
-            dst = float(dst_in.get()) * 0.54
+            dst = dst_u_in * 0.54
         elif slc_dst_wnk.get() == 'Metry':
-            dst = float(dst_in.get()) * 1000
+            dst = dst_u_in * 1000
         elif slc_dst_wnk.get() == 'Stopy':
-            dst = float(dst_in.get()) / 3280.8399
+            dst = dst_u_in / 3280.8399
 
     # wyswietlenie wyniku
     dst = round(dst, 6)
@@ -340,12 +340,13 @@ z_statku1Lable = tkinter.Label(root, text='Zanurzenie statku')
 akwnLable = tkinter.Label(root, text='Akwen 1')
 
 # str variable - podstawowa wartosc
-var = tkinter.StringVar(root, value='0')
+var_znrz = tkinter.StringVar(root, value='0')
+var_tw = tkinter.StringVar(root, value='0')
+var_zsl = tkinter.StringVar(root, value='0')
 # pola dane 1
-znrz0_input = tkinter.Entry(root, width=16, textvariable=var)
-tw_1Input = tkinter.Entry(root, width=16, textvariable=var)
-zsl_1input = tkinter.Entry(root, width=16, textvariable=var)
-
+znrz0_input = tkinter.Entry(root, width=16, textvariable=var_znrz)
+tw_1Input = tkinter.Entry(root, width=16, textvariable=var_tw)
+zsl_1input = tkinter.Entry(root, width=16, textvariable=var_zsl)
 
 #guziki
 # guzik dodania więcej akwenów
@@ -365,7 +366,7 @@ znrz0_input.grid(column=5, row=2)
 tw_1Input.grid(column=2, row=2)
 zsl_1input.grid(column=3, row=2)
 # lable
-# znrz0_lable.grid(column=1, row=0)
+
 akwnLable.grid(column=1, row=2)
 tw_1Label.grid(column=2, row=1)
 zsl_1Lable.grid(column=3, row=1)
@@ -380,3 +381,5 @@ btn_cnvrt.grid(column=1, row=51)
 
 # petla
 root.mainloop()
+
+# Filip Kozlowski
