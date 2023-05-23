@@ -1,7 +1,7 @@
 import tkinter
 import datetime
 import os
-from tkinter import messagebox
+from tkinter import messagebox, ttk
 
 
 def density(water_temp, salinity):
@@ -141,11 +141,98 @@ def open_log():
 
 
 def converter_window():
+
     converter = tkinter.Toplevel()
     converter.title('Konverter')
-    # top lable
-    lbl_tmp = tkinter.Label()
-    lbl_len
+
+    # lable
+    lbl_tmp = tkinter.Label(converter, text='Temperatura', padx=20)
+    lbl_len = tkinter.Label(converter, text='Długość', padx=20)
+    lbl_vl = tkinter.Label(converter, text='Wartość', padx=20)
+    lbl_jdnst = tkinter.Label(converter, text='Jednostka', padx=20)
+    lbl_jdnstw = tkinter.Label(converter, text='Jednostka wyniku', padx=20)
+    lbl_rslt = tkinter.Label(converter, text='Wynik', padx=20)
+    # wyswietlenie lable
+    lbl_tmp.grid(column=1, row=3)
+    lbl_len.grid(column=1, row=4)
+    lbl_vl.grid(column=2, row=2)
+    lbl_jdnst.grid(column=3, row=2)
+    lbl_jdnstw.grid(column=5, row=2)
+    lbl_rslt.grid(column=4, row=2)
+
+    # select
+    # temperatura
+    slc_tmp = tkinter.StringVar()
+    tmp_selected = ttk.Combobox(converter, width=10, textvariable=slc_tmp)
+    tmp_selected['values'] = ('Celsjusz', 'Farenheit')
+    # odleglosc
+    slc_dst = tkinter.StringVar()
+    dst_selected = ttk.Combobox(converter, width=10, textvariable=slc_dst)
+    dst_selected['values'] = ('Metry', 'Stopy', 'Mile', 'Kilometry')
+    # temperatura wynik
+    slc_tmp_wnk = tkinter.StringVar()
+    tmp_selected_wnk = ttk.Combobox(converter, width=10, textvariable=slc_tmp_wnk)
+    tmp_selected['values'] = ('Celsjusz','Farenheit')
+    # odleglosc wynik
+    slc_dst_wnk = tkinter.StringVar()
+    dst_selected_wnk = ttk.Combobox(converter, width=10, textvariable=slc_dst_wnk)
+    dst_selected['values'] = ('Metry', 'Stopy', 'Mile', 'Kilometry')
+    # wyswietlenie select
+    tmp_selected.grid(column=3, row=3)
+    tmp_selected_wnk.grid(column=5, row=3)
+    dst_selected.grid(column=3, row=4)
+    dst_selected_wnk.grid(column=5, row=4)
+
+    # input fields
+    tmp_in = tkinter.Entry(converter)
+    dst_in = tkinter.Entry(converter)
+    # wyswietlenie in fields
+    tmp_in.grid(column=2, row=3)
+    dst_in.grid(column=2, row=4)
+
+    # buttons
+    clc_tmp = tkinter.Button(converter, text='O B L I C Z', command=cnvrt_tmp_clc)
+    clc_dst = tkinter.Button(converter, text='O B L I C Z', command=cnvrt_dst_clc)
+    # wyswietlenie buttons
+    clc_tmp.grid(column=6, row=3)
+    clc_dst.grid(column=6, row=4)
+    global tmp_in, dst_in, slc_dst_wnk, slc_dst, slc_tmp, slc_tmp_wnk, converter
+
+
+def cnvrt_tmp_clc():
+    tmp = None
+    if slc_tmp is 'Celcjusz':
+        if slc_tmp_wnk is 'Celcjusz':
+            tmp = tmp_in.get()
+
+    # wyswietlenie wyniku
+    tmp_lbl = tkinter.Label(converter, text=tmp)
+    tmp_lbl.grid(column=4, row=4)
+
+
+def cnvrt_dst_clc():
+    dst = None
+    if slc_dst is 'Metry':
+        if slc_dst_wnk is 'Metry':
+            dst = dst_in.get()
+    if slc_dst is 'Stopy':
+        if slc_dst_wnk is 'Stopy':
+            dst = dst_in.get()
+        if slc_dst_wnk is 'Metry':
+            try:
+                dst = float(dst_in.get()) * 0.3048
+            except:
+                print('Błędna wartość odległości')
+        elif slc_dst_wnk is 'Mile':
+            try:
+                dst = float(dst_in.get()) * 6076.12
+            except:
+                print('Błędna wartość odległości')
+        
+
+    # wyswietlenie wyniku
+    dst_lbl = tkinter.Label(converter, text=dst)
+    dst_lbl.grid(column=4, row=3)
 
 
 # wazne stale
@@ -190,6 +277,8 @@ btncalculate = tkinter.Button(root, text=' O B L I C Z  ', padx=15, command=btnc
 btn_save = tkinter.Button(root, text='ZAPISZ', padx=24, command=save)
 # guzik otworz
 btn_open = tkinter.Button(root, text='OTWÓRZ', padx=25, command=open_log)
+# guzik converter
+btn_cnvrt = tkinter.Button(root, text='Konwerter', padx=20, command=converter_window)
 
 # packing
 # input fields
@@ -208,6 +297,7 @@ btn_add.grid(column=1, row=1)
 btncalculate.grid(column=4, columnspan=2, ipadx=50, row=50)
 btn_save.grid(column=4, row=51)
 btn_open.grid(column=5, row=51)
+btn_cnvrt.grid(column=1, row=51)
 
 # petla
 root.mainloop()
