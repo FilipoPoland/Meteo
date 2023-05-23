@@ -329,6 +329,7 @@ d_zsl = {}  # słownik na pola zasolenia
 # program
 root = tkinter.Tk()
 root.title('Kalkulator zanurzeń')
+root.iconbitmap('ship.ico')
 
 # top lable
 # znrz0_lable = tkinter.Label(root, text='Zanurzenie początkowe')
