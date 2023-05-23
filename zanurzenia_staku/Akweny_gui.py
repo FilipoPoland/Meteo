@@ -1,5 +1,6 @@
 import tkinter
 import datetime
+import os
 from tkinter import messagebox
 
 
@@ -12,6 +13,7 @@ def density(water_temp, salinity):
 
 def draughts(densty_list, zanurzenie0):
     global l_znrz
+    l_znrz = []
     try:
         znrz = float(pol_usr(zanurzenie0))
         l_znrz.append(znrz)
@@ -110,7 +112,7 @@ def btncalc():
 
     # wyswietlenie gestosci
     for i in range(count - 1):
-        dns = tkinter.Label(root, text=round(l_dns[i], 3))
+        dns = tkinter.Label(root, text=round(l_dns[i], 4))
         dns.grid(column=4, row=i + 2)
 
     # lista zanurzenia
@@ -126,12 +128,24 @@ def btncalc():
 def save():
     time_stmp = str(datetime.datetime.now())
     print(time_stmp)
-    with open('saved_session.txt', 'a') as file:
-        file.write(str(time_stmp) + '\n'
+    with open('../zanurzenia_logs.txt', 'a') as file:
+        file.write('\n' + str(time_stmp) + '\n'
                    + 'Lista temperatur wody:\n' + str(l_tw) + '\n'
                    + 'Lista zasolen wody: \n' + str(l_zsl) + '\n'
                    + 'Lista gestosci wody: \n' + str(l_dns) + '\n'
                    + 'Lista zanurzen statku:\n' + str(l_znrz) + '\n')
+
+
+def open_log():
+    os.system('start zanurzenia_logs.txt')
+
+
+def converter_window():
+    converter = tkinter.Toplevel()
+    converter.title('Konverter')
+    # top lable
+    lbl_tmp = tkinter.Label()
+    lbl_len
 
 
 # wazne stale
@@ -167,14 +181,15 @@ znrz0_input = tkinter.Entry(root, width=16)
 tw_1Input = tkinter.Entry(root, width=16)
 zsl_1input = tkinter.Entry(root, width=16)
 
+#guziki
 # guzik dodania więcej akwenów
-btn_add = tkinter.Button(root, text='Dodaj akwen.', padx=20, command=btnpress)
-
+btn_add = tkinter.Button(root, text='DODAJ AKWEN', padx=10, command=btnpress)
 # guzik kalkuluj
-btncalculate = tkinter.Button(root, text='Oblicz', padx=20, command=btncalc)
-
-# guzik zappisz
-btn_save = tkinter.Button(root, text='Zapisz', padx=20, command=save)
+btncalculate = tkinter.Button(root, text=' O B L I C Z  ', padx=15, command=btncalc)
+# guzik zapisz
+btn_save = tkinter.Button(root, text='ZAPISZ', padx=24, command=save)
+# guzik otworz
+btn_open = tkinter.Button(root, text='OTWÓRZ', padx=25, command=open_log)
 
 # packing
 # input fields
@@ -188,11 +203,11 @@ tw_1Label.grid(column=2, row=1)
 zsl_1Lable.grid(column=3, row=1)
 g_wody1Lable.grid(column=4, row=1)
 z_statku1Lable.grid(column=5, row=1)
-
 # guziki
 btn_add.grid(column=1, row=1)
 btncalculate.grid(column=4, columnspan=2, ipadx=50, row=50)
-btn_save.grid(column=4, columnspan=2, ipadx=50, row=51)
+btn_save.grid(column=4, row=51)
+btn_open.grid(column=5, row=51)
 
 # petla
 root.mainloop()
