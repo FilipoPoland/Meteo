@@ -37,8 +37,6 @@ def pol_usr(get_input):
 
 def btnpress():
     counting()
-
-    # to mimo dodawania pól nie robi dla mnie nic przydatnego bo nie wiem jak odwołać się do tych pół
     # akwen nazwa
     lbl = tkinter.Label(text=f'Akwen {count - 1}')
 
