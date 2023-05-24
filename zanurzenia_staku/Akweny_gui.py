@@ -133,7 +133,7 @@ def btncalc():
 def save():
     time_stmp = str(datetime.datetime.now())
     print(time_stmp)
-    with open('../zanurzenia_logs.txt', 'a') as file:
+    with open('zanurzenia_logs.txt', 'a') as file:
         file.write('\n' + str(time_stmp) + '\n'
                    + 'Lista temperatur wody:\n' + str(l_tw) + '\n'
                    + 'Lista zasolen wody: \n' + str(l_zsl) + '\n'
@@ -279,7 +279,7 @@ def cnvrt_dst_clc():
     elif slc_dst.get() == 'Mile Morskie':
         if slc_dst_wnk.get() == 'Mile Morskie':
             dst = dst_u_in
-        elif slc_dst_wnk.get == 'Kilometry':
+        elif slc_dst_wnk.get() == 'Kilometry':
             dst = dst_u_in * 1.851851851851851852
         elif slc_dst_wnk.get() == 'Metry':
             dst = dst_u_in * 1851.851851851851852
