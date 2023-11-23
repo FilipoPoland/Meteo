@@ -1,0 +1,10 @@
+
+2023-05-23 08:23:59.970523
+Lista temperatur wody:
+[3.5, 7.0, 11.0]
+Lista zasolen wody: 
+[14.0, 21.0, 30.0]
+Lista gestosci wody: 
+[1.0111424975, 1.01637589, 1.02287621]
+Lista zanurzen statku:
+[2.5, 2.4871273203361803, 2.4713217680074897]
