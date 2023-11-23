@@ -1,0 +1,5 @@
+t = input('Podaj temperaturę: ')
+P2 = input('Podaj ciśnienie zmierzone: ')
+h = input('Podaj wysokość pomiaru: ')
+P1 = float(P2)*(float(h) + 16000*(1+0.004 * float(t)))/((16000*( 1 + 0.004 * float(t) ))-float(h))
+print(P1)
